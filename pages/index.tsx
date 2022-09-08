@@ -1,8 +1,5 @@
 import Seo from '../components/Seo';
 import { GetServerSideProps, InferGetServerSidePropsType } from 'next';
-import { useState, useEffect } from 'react';
-
-const API_KEY = '81e362f4c1140a32fa5dad306fac3a32';
 
 interface IMovieProps {
   adult: boolean;
@@ -41,12 +38,20 @@ export default function Home({
       <style jsx>{`
         .container {
           display: grid;
-          grid-template-columns: 1fr 1fr;
+          grid-template-columns: repeat(4, 1fr);
           padding: 20px;
           gap: 20px;
         }
+
+        .movie {
+          display: flex;
+          flex-direction: column;
+          justify-content: center;
+          align-items: center;
+        }
+
         .movie img {
-          max-width: 100%;
+          max-width: 70%;
           border-radius: 12px;
           transition: transform 0.2s ease-in-out;
           box-shadow: rgba(0, 0, 0, 0.1) 0px 4px 12px;
@@ -57,6 +62,15 @@ export default function Home({
         .movie h4 {
           font-size: 18px;
           text-align: center;
+        }
+
+        @media (max-width: 768px) {
+          .container {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            padding: 20px;
+            gap: 20px;
+          }
         }
       `}</style>
     </div>
