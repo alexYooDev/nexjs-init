@@ -1,29 +1,33 @@
 import Seo from '../components/Seo';
+import { GetServerSideProps, InferGetServerSidePropsType } from 'next';
 import { useState, useEffect } from 'react';
 
 const API_KEY = '81e362f4c1140a32fa5dad306fac3a32';
 
-interface Movie {
-  id: string;
+interface IMovieProps {
+  adult: boolean;
+  backdrop_path: string;
+  genre_ids: number[];
+  id: number;
+  original_language: string;
   original_title: string;
+  overview: string;
+  popularity: number;
   poster_path: string;
+  release_date: string;
+  title: string;
+  video: boolean;
+  vote_average: number;
+  vote_count: number;
 }
 
-export default function Home() {
-  const [movies, setMovies] = useState([]);
-
-  useEffect(() => {
-    (async () => {
-      const { results } = await (await fetch('/api/movies')).json();
-      setMovies(results);
-    })();
-  }, []);
-
+export default function Home({
+  results,
+}: InferGetServerSidePropsType<GetServerSideProps>) {
   return (
     <div className='container'>
       <Seo title='Home' />
-      {!movies && <h4>Loading...</h4>}
-      {movies?.map((movie: Movie) => (
+      {results?.map((movie: IMovieProps) => (
         <div key={movie.id}>
           <div className='movie' key={movie.id}>
             <img
@@ -57,4 +61,13 @@ export default function Home() {
       `}</style>
     </div>
   );
+}
+
+export async function getServerSideProps({}: GetServerSideProps) {
+  const { results } = await (
+    await fetch('http://localhost:3000/api/movies')
+  ).json();
+  return {
+    props: { results },
+  };
 }
